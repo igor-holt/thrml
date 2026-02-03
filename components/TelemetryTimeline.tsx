@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from './Card';
-import { telemetryData, getProbabilityData } from '../lib/telemetry';
+import { telemetryData, getProbabilityData } from '../data/telemetry';
 import {
   LineChart,
   Line,
