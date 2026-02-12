@@ -248,12 +248,7 @@ def block_state_to_global(block_state: list[_State], spec: BlockSpec) -> list[_G
             continue
 
         collected = [block_state[i] for i in sd_indexes]
-
-        # todo: should probably expand dims to be 1 to be consistent?
-        if len(collected) == 1:
-            global_state.append(collected[0])
-        else:
-            global_state.append(jax.tree.map(_stack, *collected))
+        global_state.append(jax.tree.map(_stack, *collected))
 
     return global_state
 
