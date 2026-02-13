@@ -1,5 +1,7 @@
 import pytest
 from thrml.pgm import _CounterMeta
+import threading
+import time
 
 def test_class_ordering_uniqueness():
     """Verify that classes created with _CounterMeta have a strict, unique ordering."""
@@ -53,3 +55,46 @@ def test_ordering_with_different_classes():
     # Assuming module is same
     assert A < B
     assert not (B < A)
+
+def test_thread_safe_class_creation():
+    """Verify that class creation is thread-safe and produces unique _class_id values."""
+    num_threads = 10
+    classes_per_thread = 10
+    all_classes = []
+    lock = threading.Lock()
+    
+    def create_classes(thread_id):
+        """Create classes in a separate thread."""
+        local_classes = []
+        for i in range(classes_per_thread):
+            cls = _CounterMeta(f"ThreadClass_{thread_id}_{i}", (), {})
+            local_classes.append(cls)
+            # Small sleep to increase likelihood of race conditions if lock is missing
+            time.sleep(0.0001)
+        
+        with lock:
+            all_classes.extend(local_classes)
+    
+    # Create and start threads
+    threads = []
+    for i in range(num_threads):
+        thread = threading.Thread(target=create_classes, args=(i,))
+        threads.append(thread)
+        thread.start()
+    
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
+    
+    # Verify we created the expected number of classes
+    assert len(all_classes) == num_threads * classes_per_thread
+    
+    # Verify all _class_id values are unique
+    class_ids = [cls._class_id for cls in all_classes]
+    assert len(class_ids) == len(set(class_ids)), "All _class_id values must be unique"
+    
+    # Verify all classes have valid _class_id attributes
+    for cls in all_classes:
+        assert hasattr(cls, "_class_id")
+        assert isinstance(cls._class_id, int)
+        assert cls._class_id >= 0
