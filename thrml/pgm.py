@@ -1,4 +1,5 @@
 import abc
+import threading
 from dataclasses import dataclass, is_dataclass
 from typing import ClassVar
 
@@ -12,11 +13,13 @@ class _CounterMeta(abc.ABCMeta):
     Used internally by THRML for node identification and ordering.
     """
     _class_creation_counter: int = 0
+    _counter_lock: threading.Lock = threading.Lock()
 
     def __init__(cls, name, bases, dct):
         super().__init__(name, bases, dct)
-        cls._class_id = _CounterMeta._class_creation_counter
-        _CounterMeta._class_creation_counter += 1
+        with _CounterMeta._counter_lock:
+            cls._class_id = _CounterMeta._class_creation_counter
+            _CounterMeta._class_creation_counter += 1
 
     def __call__(cls, *args, **kwargs):
         instance = super().__call__(*args, **kwargs)
