@@ -1,4 +1,5 @@
 import abc
+import itertools
 from dataclasses import dataclass, is_dataclass
 from typing import ClassVar
 
@@ -11,12 +12,11 @@ class _CounterMeta(abc.ABCMeta):
 
     Used internally by THRML for node identification and ordering.
     """
-    _class_creation_counter: int = 0
+    _class_creation_counter = itertools.count()
 
     def __init__(cls, name, bases, dct):
         super().__init__(name, bases, dct)
-        cls._class_id = _CounterMeta._class_creation_counter
-        _CounterMeta._class_creation_counter += 1
+        cls._class_id = next(_CounterMeta._class_creation_counter)
 
     def __call__(cls, *args, **kwargs):
         instance = super().__call__(*args, **kwargs)
