@@ -12,6 +12,7 @@ class _CounterMeta(abc.ABCMeta):
 
     Used internally by THRML for node identification and ordering.
     """
+
     _class_creation_counter = itertools.count()
 
     def __init__(cls, name, bases, dct):

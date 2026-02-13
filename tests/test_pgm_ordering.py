@@ -1,5 +1,7 @@
 import unittest
+
 from thrml.pgm import _CounterMeta
+
 
 class TestClassOrdering(unittest.TestCase):
     def test_class_ordering_uniqueness(self):
@@ -43,6 +45,7 @@ class TestClassOrdering(unittest.TestCase):
 
     def test_ordering_with_different_classes(self):
         """Verify ordering still works for different classes."""
+
         def make_class(name):
             return _CounterMeta(name, (), {})
 
@@ -54,5 +57,6 @@ class TestClassOrdering(unittest.TestCase):
         self.assertTrue(A < B)
         self.assertFalse(B < A)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
