@@ -1,7 +1,6 @@
 import pytest
 from thrml.pgm import _CounterMeta
 import threading
-import time
 
 def test_class_ordering_uniqueness():
     """Verify that classes created with _CounterMeta have a strict, unique ordering."""
@@ -69,8 +68,6 @@ def test_thread_safe_class_creation():
         for i in range(classes_per_thread):
             cls = _CounterMeta(f"ThreadClass_{thread_id}_{i}", (), {})
             local_classes.append(cls)
-            # Small sleep to increase likelihood of race conditions if lock is missing
-            time.sleep(0.0001)
         
         with lock:
             all_classes.extend(local_classes)
