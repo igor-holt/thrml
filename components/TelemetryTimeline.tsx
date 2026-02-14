@@ -17,6 +17,19 @@ import {
 const TelemetryTimeline: React.FC = () => {
   const chartData = getProbabilityData();
 
+  if (!chartData || chartData.length === 0) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <Card>
+          <h2>Telemetry Timeline</h2>
+          <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
+            <p>No telemetry data available. Check back later!</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: '20px' }}>
       <Card>
@@ -44,19 +57,20 @@ const TelemetryTimeline: React.FC = () => {
         
         {/* Optional: Raw Table for Details */}
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className="telemetry-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <caption className="sr-only">Telemetry Event Log</caption>
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Event</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Event</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
               </tr>
             </thead>
             <tbody>
               {telemetryData.map((entry) => (
                 <tr key={entry.logId} style={{ borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px' }}>{entry.logId}</td>
+                  <th scope="row" style={{ padding: '10px', textAlign: 'left', fontWeight: 'normal' }}>{entry.logId}</th>
                   <td style={{ padding: '10px' }}>{entry.utc}</td>
                   <td style={{ padding: '10px' }}>{entry.event}</td>
                   <td style={{ padding: '10px' }}>{entry.prediction.p}</td>
