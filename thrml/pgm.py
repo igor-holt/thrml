@@ -1,4 +1,5 @@
 import abc
+import itertools
 from dataclasses import dataclass, is_dataclass
 from typing import ClassVar
 
@@ -12,6 +13,12 @@ class _CounterMeta(abc.ABCMeta):
     Used internally by THRML for node identification and ordering.
     """
 
+    _class_creation_counter = itertools.count()
+
+    def __init__(cls, name, bases, dct):
+        super().__init__(name, bases, dct)
+        cls._class_id = next(_CounterMeta._class_creation_counter)
+
     def __call__(cls, *args, **kwargs):
         instance = super().__call__(*args, **kwargs)
         if not is_dataclass(cls):
@@ -21,10 +28,13 @@ class _CounterMeta(abc.ABCMeta):
         return instance
 
     def __lt__(cls, other):
-        # todo: make sure this is sufficient to distinguish and be unique for JAX
         if not isinstance(other, type):
             raise NotImplementedError
-        return (cls.__module__, cls.__qualname__) < (other.__module__, other.__qualname__)
+
+        self_id = getattr(cls, "_class_id", -1)
+        other_id = getattr(other, "_class_id", -1)
+
+        return (cls.__module__, cls.__qualname__, self_id) < (other.__module__, other.__qualname__, other_id)
 
 
 class _UniqueID(metaclass=_CounterMeta):
