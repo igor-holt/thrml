@@ -465,43 +465,49 @@ def sample_with_observation(
         schedule.n_warmup,
         sampler_states,
     )
-    mem, warmup_observation = f_observe(program, warmup_state, state_clamp, observation_carry_init, jnp.array(0))
 
     if schedule.n_samples <= 1:
+        mem, warmup_observation = f_observe(program, warmup_state, state_clamp, observation_carry_init, jnp.array(0))
         warmup_observation = jax.tree.map(lambda x: x[None], warmup_observation)
         return mem, warmup_observation
 
     # collect samples
 
     def body_fn(carry, input):
-        (prev_state, prev_sampler_state), _mem = carry
-
+        (state, sampler_state), mem = carry
         _key, i = input
 
-        new_state, new_sampler_state = _run_blocks(
-            _key,
-            program,
-            prev_state,
-            state_clamp,
-            schedule.steps_per_sample,
-            prev_sampler_state,
-        )
-        _mem, observe_out = f_observe(program, new_state, state_clamp, _mem, i)
-        new_carry = ((new_state, new_sampler_state), _mem)
+        mem, observe_out = f_observe(program, state, state_clamp, mem, i)
+
+        should_step = i < schedule.n_samples - 1
+
+        def step_fn(s):
+            st, samp_st = s
+            return _run_blocks(
+                _key,
+                program,
+                st,
+                state_clamp,
+                schedule.steps_per_sample,
+                samp_st,
+            )
+
+        def no_step_fn(s):
+            return s
+
+        new_state_pair = jax.lax.cond(should_step, step_fn, no_step_fn, (state, sampler_state))
+
+        new_carry = (new_state_pair, mem)
         return new_carry, observe_out
 
-    keys = jax.random.split(key, schedule.n_samples - 1)
-    outer_iters = jnp.arange(1, schedule.n_samples)
+    keys = jax.random.split(key, schedule.n_samples)
+    outer_iters = jnp.arange(schedule.n_samples)
 
     inputs = (keys, outer_iters)
 
-    (_, mem_out), observed_results = jax.lax.scan(body_fn, ((warmup_state, warmup_sampler_states), mem), inputs)
-
-    # need to prepend the first observation from the warmup
-    def prepend_warmup_observation(_warmup, _rest):
-        return jnp.concatenate([_warmup[None], _rest], axis=0)
-
-    observed_results = jax.tree.map(prepend_warmup_observation, warmup_observation, observed_results)
+    (_, mem_out), observed_results = jax.lax.scan(
+        body_fn, ((warmup_state, warmup_sampler_states), observation_carry_init), inputs
+    )
 
     return mem_out, observed_results
 
