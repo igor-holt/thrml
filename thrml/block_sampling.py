@@ -1,6 +1,6 @@
 import dataclasses
 from collections import defaultdict
-from typing import Mapping, Sequence, Type, TypeAlias
+from typing import Mapping, Sequence, Type, TypeAlias, Any
 
 import equinox as eqx
 import jax
@@ -266,6 +266,12 @@ class BlockSamplingProgram(eqx.Module):
 _State: TypeAlias = PyTree[Shaped[Array, "nodes ?*state"], "_State"]
 
 
+def _resize_sd(leaf: Any, n_nodes: int) -> Any:
+    if isinstance(leaf, jax.ShapeDtypeStruct):
+        return jax.ShapeDtypeStruct((n_nodes, *leaf.shape), leaf.dtype)
+    return leaf
+
+
 def sample_single_block(
     key: Key[Array, ""],
     state_free: list[_State],
@@ -320,12 +326,7 @@ def sample_single_block(
     node_type = this_block.node_type
     template_sd = program.gibbs_spec.node_shape_struct[node_type]
 
-    def _resize_sd(leaf):
-        if isinstance(leaf, jax.ShapeDtypeStruct):
-            return jax.ShapeDtypeStruct((len(this_block.nodes), *leaf.shape), leaf.dtype)
-        return leaf
-
-    sd_to_pass = jax.tree.map(_resize_sd, template_sd)
+    sd_to_pass = jax.tree.map(lambda x: _resize_sd(x, len(this_block.nodes)), template_sd)
 
     sampler = program.samplers[block]
     out_samples, out_sampler_state = sampler.sample(
