@@ -443,3 +443,27 @@ def verify_block_state(
         if block_axis is not None:
             if not batch_shape[block_axis] == len(block.nodes):
                 raise RuntimeError("State shape did not match detected block length")
+
+def get_block_location(block: Block, spec: BlockSpec) -> tuple[int, int]:
+    """
+    Get the global state location (sd_index, start_index) for a block.
+    Assumes block nodes are contiguous in global state.
+
+    **Arguments:**
+
+    - `block`: The [`thrml.Block`][] whose location is needed.
+    - `spec`: The [`thrml.BlockSpec`][] that defines the mapping.
+
+    **Returns:**
+
+    Tuple ``(sd_index, start_index)`` where
+
+    * *sd_index* is the position inside the global list returned by
+      [`thrml.block_state_to_global`][], and
+    * *start_index* is the starting index in the node dimension for the block.
+    """
+    if not block.nodes:
+        raise ValueError("Empty block")
+
+    node = block.nodes[0]
+    return spec.node_global_location_map[node]
