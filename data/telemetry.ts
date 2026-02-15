@@ -56,5 +56,7 @@ export function getProbabilityData() {
   return telemetryData.map(entry => ({
     time: new Date(entry.utc).getTime(), // For x-axis
     probability: entry.prediction.p,
+    event: entry.event,
+    subjective: entry.subjective,
   }));
 }
