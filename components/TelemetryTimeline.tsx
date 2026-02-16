@@ -14,6 +14,30 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '4px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        color: '#333'
+      }}>
+        <p style={{ fontWeight: 'bold', margin: 0 }}>{new Date(label).toUTCString()}</p>
+        <p style={{ margin: '5px 0' }}>Event: {data.event}</p>
+        <p style={{ margin: '5px 0' }}>Probability: {data.probability}</p>
+        <p style={{ fontStyle: 'italic', margin: 0, fontSize: '0.9em', color: '#666' }}>
+          "{data.subjective}"
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const TelemetryTimeline: React.FC = () => {
   const chartData = getProbabilityData();
 
@@ -33,9 +57,7 @@ const TelemetryTimeline: React.FC = () => {
                 stroke="#888"
               />
               <YAxis domain={[0, 1]} />
-              <Tooltip
-                labelFormatter={(label) => new Date(label).toUTCString()}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line type="monotone" dataKey="probability" stroke="#8884d8" strokeWidth={2} />
             </LineChart>
@@ -45,12 +67,13 @@ const TelemetryTimeline: React.FC = () => {
         {/* Optional: Raw Table for Details */}
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <caption style={{ textAlign: 'left', marginBottom: '10px', fontWeight: 'bold' }}>Telemetry Event Log</caption>
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Event</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Event</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
               </tr>
             </thead>
             <tbody>
