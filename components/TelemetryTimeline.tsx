@@ -14,6 +14,29 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div style={{
+        backgroundColor: '#fff',
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '4px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        <p style={{ margin: '0 0 5px 0', fontWeight: 'bold' }}>{new Date(label).toUTCString()}</p>
+        <p style={{ margin: '0', color: '#666' }}>Event: <span style={{ color: '#000' }}>{data.event}</span></p>
+        <p style={{ margin: '0', color: '#666' }}>Mode: <span style={{ color: '#000' }}>{data.mode}</span></p>
+        <p style={{ margin: '0', color: '#8884d8', fontWeight: 'bold' }}>
+          Probability: {data.probability}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const TelemetryTimeline: React.FC = () => {
   const chartData = getProbabilityData();
 
@@ -33,9 +56,7 @@ const TelemetryTimeline: React.FC = () => {
                 stroke="#888"
               />
               <YAxis domain={[0, 1]} />
-              <Tooltip
-                labelFormatter={(label) => new Date(label).toUTCString()}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line type="monotone" dataKey="probability" stroke="#8884d8" strokeWidth={2} />
             </LineChart>
@@ -44,26 +65,32 @@ const TelemetryTimeline: React.FC = () => {
         
         {/* Optional: Raw Table for Details */}
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Event</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {telemetryData.map((entry) => (
-                <tr key={entry.logId} style={{ borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px' }}>{entry.logId}</td>
-                  <td style={{ padding: '10px' }}>{entry.utc}</td>
-                  <td style={{ padding: '10px' }}>{entry.event}</td>
-                  <td style={{ padding: '10px' }}>{entry.prediction.p}</td>
+          {telemetryData.length === 0 ? (
+            <p style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+              No telemetry data available.
+            </p>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid #ddd' }}>
+                  <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
+                  <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
+                  <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Event</th>
+                  <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {telemetryData.map((entry) => (
+                  <tr key={entry.logId} style={{ borderBottom: '1px solid #ddd' }}>
+                    <td scope="row" style={{ padding: '10px' }}>{entry.logId}</td>
+                    <td style={{ padding: '10px' }}>{entry.utc}</td>
+                    <td style={{ padding: '10px' }}>{entry.event}</td>
+                    <td style={{ padding: '10px' }}>{entry.prediction.p}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </Card>
     </div>
