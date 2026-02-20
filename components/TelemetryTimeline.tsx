@@ -14,8 +14,34 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="custom-tooltip" style={{ backgroundColor: '#fff', border: '1px solid #ccc', padding: '10px' }}>
+        <p className="label" style={{ fontWeight: 'bold', marginBottom: '5px' }}>{new Date(label).toUTCString()}</p>
+        <p className="intro" style={{ margin: 0 }}>{`Event: ${data.event}`}</p>
+        <p className="intro" style={{ margin: 0 }}>{`Mode: ${data.mode}`}</p>
+        <p className="desc" style={{ margin: 0, color: '#8884d8' }}>{`Probability: ${data.probability}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const TelemetryTimeline: React.FC = () => {
   const chartData = getProbabilityData();
+
+  if (telemetryData.length === 0) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <Card>
+          <h2>Telemetry Timeline</h2>
+          <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>No telemetry data available</div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '20px' }}>
@@ -33,9 +59,7 @@ const TelemetryTimeline: React.FC = () => {
                 stroke="#888"
               />
               <YAxis domain={[0, 1]} />
-              <Tooltip
-                labelFormatter={(label) => new Date(label).toUTCString()}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line type="monotone" dataKey="probability" stroke="#8884d8" strokeWidth={2} />
             </LineChart>
@@ -47,16 +71,16 @@ const TelemetryTimeline: React.FC = () => {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Event</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Event</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
               </tr>
             </thead>
             <tbody>
               {telemetryData.map((entry) => (
                 <tr key={entry.logId} style={{ borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '10px' }}>{entry.logId}</td>
+                  <td scope="row" style={{ padding: '10px' }}>{entry.logId}</td>
                   <td style={{ padding: '10px' }}>{entry.utc}</td>
                   <td style={{ padding: '10px' }}>{entry.event}</td>
                   <td style={{ padding: '10px' }}>{entry.prediction.p}</td>
