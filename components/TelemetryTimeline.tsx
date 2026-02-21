@@ -14,6 +14,45 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div style={{
+        backgroundColor: '#fff',
+        border: '1px solid #e0e0e0',
+        padding: '12px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+        minWidth: '200px'
+      }}>
+        <p style={{ fontWeight: 'bold', marginBottom: '8px', fontSize: '0.9rem' }}>
+          {label ? new Date(label).toUTCString() : ''}
+        </p>
+        <p style={{ margin: '4px 0', fontSize: '0.9rem' }}>
+          <span style={{ color: '#666' }}>Event:</span> {data.event}
+        </p>
+        <p style={{ margin: '4px 0', fontSize: '0.9rem' }}>
+          <span style={{ color: '#666' }}>Probability:</span> {(data.probability * 100).toFixed(1)}%
+        </p>
+        {data.subjective && (
+          <p style={{
+            marginTop: '8px',
+            fontStyle: 'italic',
+            color: '#666',
+            fontSize: '0.85em',
+            borderTop: '1px solid #eee',
+            paddingTop: '8px'
+          }}>
+            "{data.subjective}"
+          </p>
+        )}
+      </div>
+    );
+  }
+  return null;
+};
+
 const TelemetryTimeline: React.FC = () => {
   const chartData = getProbabilityData();
 
@@ -33,9 +72,7 @@ const TelemetryTimeline: React.FC = () => {
                 stroke="#888"
               />
               <YAxis domain={[0, 1]} />
-              <Tooltip
-                labelFormatter={(label) => new Date(label).toUTCString()}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line type="monotone" dataKey="probability" stroke="#8884d8" strokeWidth={2} />
             </LineChart>
