@@ -34,7 +34,40 @@ const TelemetryTimeline: React.FC = () => {
               />
               <YAxis domain={[0, 1]} />
               <Tooltip
-                labelFormatter={(label) => new Date(label).toUTCString()}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div
+                        className="card"
+                        style={{ padding: '10px', border: '1px solid #ccc' }}
+                      >
+                        <p style={{ fontWeight: 'bold', margin: '0 0 5px' }}>
+                          {new Date(label).toUTCString()}
+                        </p>
+                        <p style={{ margin: '0 0 5px', color: '#8884d8' }}>
+                          Probability: {data.probability}
+                        </p>
+                        <p style={{ margin: '0 0 5px', fontSize: '0.9em' }}>
+                          <strong>Event:</strong> {data.event}
+                        </p>
+                        {data.subjective && (
+                          <p
+                            style={{
+                              margin: 0,
+                              fontStyle: 'italic',
+                              fontSize: '0.85em',
+                              color: '#666',
+                            }}
+                          >
+                            &quot;{data.subjective}&quot;
+                          </p>
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
               />
               <Legend />
               <Line type="monotone" dataKey="probability" stroke="#8884d8" strokeWidth={2} />
