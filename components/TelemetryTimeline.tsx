@@ -40,7 +40,7 @@ const TelemetryTimeline: React.FC = () => {
                     return (
                       <div
                         className="card"
-                        style={{ padding: '10px', border: '1px solid #ccc' }}
+                        style={{ padding: '10px' }}
                       >
                         <p style={{ fontWeight: 'bold', margin: '0 0 5px' }}>
                           {new Date(label).toUTCString()}
