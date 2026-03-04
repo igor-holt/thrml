@@ -1,0 +1,3 @@
+## 2024-03-04 - Screen-reader Only Elements Styling
+**Learning:** `app/globals.css` does not include a `.sr-only` utility class or similar global helper for visually hiding elements while keeping them accessible to screen readers.
+**Action:** When creating visually hidden elements for accessibility (such as table captions or hidden labels), use inline CSS `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}` instead of introducing new custom utility classes, as `globals.css` is intentionally kept minimal.
