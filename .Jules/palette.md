@@ -1,0 +1,1 @@
+## 2024-05-15 - Data tables\n**Learning:** Data tables (such as in TelemetryTimeline) must include the scope="col" attribute on header cells (<th>) and a <caption> element for accessibility.\n**Action:** Add scope="col" and <caption> element for telemetry table accessibility
