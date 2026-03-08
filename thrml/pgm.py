@@ -12,6 +12,13 @@ class _CounterMeta(abc.ABCMeta):
     Used internally by THRML for node identification and ordering.
     """
 
+    _class_counter: int = 0
+
+    def __init__(cls, name, bases, dct):
+        super().__init__(name, bases, dct)
+        cls._class_id = _CounterMeta._class_counter
+        _CounterMeta._class_counter += 1
+
     def __call__(cls, *args, **kwargs):
         instance = super().__call__(*args, **kwargs)
         if not is_dataclass(cls):
@@ -21,10 +28,15 @@ class _CounterMeta(abc.ABCMeta):
         return instance
 
     def __lt__(cls, other):
-        # todo: make sure this is sufficient to distinguish and be unique for JAX
         if not isinstance(other, type):
             raise NotImplementedError
-        return (cls.__module__, cls.__qualname__) < (other.__module__, other.__qualname__)
+
+        # Provide fallback class ID for types not created by _CounterMeta to ensure
+        # a total ordering even if compared against non-_CounterMeta types.
+        cls_id = getattr(cls, "_class_id", -1)
+        other_id = getattr(other, "_class_id", -1)
+
+        return (cls.__module__, cls.__qualname__, cls_id) < (other.__module__, other.__qualname__, other_id)
 
 
 class _UniqueID(metaclass=_CounterMeta):
