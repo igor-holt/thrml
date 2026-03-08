@@ -1,17 +1,20 @@
 import jax
 import jax.numpy as jnp
+
 from thrml.pgm import AbstractNode
+
 
 def test_abstract_node_ordering():
     def create_node_class(name):
         class Node(AbstractNode):
             pass
+
         Node.__name__ = name
         Node.__qualname__ = name
         return Node
 
     A = create_node_class("A")
-    B = create_node_class("A") # same name and module to trigger equality fallback
+    B = create_node_class("A")  # same name and module to trigger equality fallback
 
     assert A.__module__ == B.__module__
     assert A.__qualname__ == B.__qualname__
@@ -23,10 +26,12 @@ def test_abstract_node_ordering():
     sorted_nodes = sorted([B, A])
     assert sorted_nodes == [A, B]
 
+
 def test_jax_tree_sorting():
     def create_node_class(name):
         class Node(AbstractNode):
             pass
+
         Node.__name__ = name
         Node.__qualname__ = name
         return Node
