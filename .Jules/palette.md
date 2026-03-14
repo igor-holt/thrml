@@ -1,0 +1,3 @@
+## 2024-05-14 - Accessible Data Tables
+**Learning:** Data tables often lack screen reader context and navigation cues. Specifically, many raw tables lack a `<caption>` element which provides the table's overall context, and `<th>` elements without `scope="col"` are harder for screen readers to navigate.
+**Action:** When creating or modifying data tables, always include a `<caption>` element (using visually hidden inline styles if a visual title breaks the design: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`) and add `scope="col"` to column headers to ensure structural clarity for screen readers.
