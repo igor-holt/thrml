@@ -1,0 +1,3 @@
+## 2024-05-01 - Visually Hidden Accessibility Without Utility Classes
+**Learning:** This design system relies on plain CSS in globals.css without providing utility classes like `.sr-only`. Hiding elements visually while keeping them available for screen readers (like table captions) requires providing the extensive CSS properties.
+**Action:** When needing visually hidden accessible text, use a reusable inline style object containing the standard `.sr-only` properties (`position: absolute`, `width: 1px`, `height: 1px`, `padding: 0`, `margin: -1px`, `overflow: hidden`, `clip: rect(0, 0, 0, 0)`, `whiteSpace: nowrap`, `borderWidth: 0`) to maintain accessibility without relying on missing utility classes.
