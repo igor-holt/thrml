@@ -45,7 +45,7 @@ const TelemetryTimeline: React.FC = () => {
         {/* Optional: Raw Table for Details */}
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <caption style={{ position: 'absolute', width: '1px', overflow: 'hidden' }}>
+            <caption className="sr-only">
               Telemetry event log history
             </caption>
             <thead>
