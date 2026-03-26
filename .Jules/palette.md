@@ -1,0 +1,3 @@
+## 2026-03-26 - Accessible Tables and Visually Hidden Text
+**Learning:** This Next.js web application lacks utility classes like `.sr-only` in its `app/globals.css`. It also uses raw `<table>` elements that require accessibility enhancements such as `<caption>` elements and `scope` attributes on headers.
+**Action:** When making elements (like `<caption>`) visually hidden for screen readers without breaking layouts, use explicit inline CSS styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`. Additionally, always add `scope="col"` (or `scope="row"`) to table header (`<th>`) cells for clear data association.
