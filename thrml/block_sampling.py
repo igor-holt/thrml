@@ -12,6 +12,7 @@ from thrml.block_management import (
     Block,
     BlockSpec,
     block_state_to_global,
+    get_block_location,
     verify_block_state,
 )
 from thrml.interaction import InteractionGroup
@@ -368,8 +369,9 @@ def sample_blocks(
     verify_block_state(program.gibbs_spec.clamped_blocks, clamp_state, sds, -1)
 
     keys = jax.random.split(key, (len(program.gibbs_spec.free_blocks),))
+    global_state = block_state_to_global(state_free + clamp_state, program.gibbs_spec)
+
     for sampling_group in program.gibbs_spec.sampling_order:
-        global_state = block_state_to_global(state_free + clamp_state, program.gibbs_spec)
         state_updates = {}
         for i in sampling_group:
             state_updates[i], sampler_state[i] = sample_single_block(
@@ -378,6 +380,16 @@ def sample_blocks(
 
         for i, state in state_updates.items():
             state_free[i] = state
+
+            block = program.gibbs_spec.free_blocks[i]
+            sd_ind, start_ind = get_block_location(block, program.gibbs_spec)
+
+            def update_leaf(global_leaf, update_leaf):
+                start_indices = (start_ind,) + (0,) * (global_leaf.ndim - 1)
+                return jax.lax.dynamic_update_slice(global_leaf, update_leaf, start_indices)
+
+            global_state[sd_ind] = jax.tree.map(update_leaf, global_state[sd_ind], state)
+
     return state_free, sampler_state
 
 
