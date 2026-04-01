@@ -1,0 +1,3 @@
+## 2024-11-20 - Data Table Accessibility and Utility Classes
+**Learning:** The project's data tables required explicit `<caption>` elements and `scope="col"` attributes on headers for proper screen reader navigation. Furthermore, standard utility classes like `.sr-only` are not available in `globals.css`.
+**Action:** Used explicit inline CSS (`style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`) to visually hide the `<caption>` element without breaking the layout, ensuring accessibility without relying on external utility classes.
