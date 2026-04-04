@@ -14,7 +14,21 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: {
+      time: number;
+      probability: number;
+      event: string;
+      outcome: string;
+      subjective: string;
+    };
+  }>;
+  label?: number;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     // Helper to format label safely
