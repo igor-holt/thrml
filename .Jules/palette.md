@@ -1,0 +1,3 @@
+## 2025-04-08 - Data Table Accessibility Constraints
+**Learning:** The application lacks utility classes like `.sr-only` for visually hiding elements. Screen-reader descriptions for components like data tables (using `<caption>`) require inline CSS to ensure accessibility without breaking layout.
+**Action:** When adding accessible descriptions for visually hidden components, use explicit inline styles (`position: absolute`, `width: 1px`, `height: 1px`, `overflow: hidden`, etc.) rather than relying on assumed utility classes. Additionally, always include `scope="col"` on header cells `<th>` in tables to ensure correct screen reader navigation.
