@@ -1,0 +1,3 @@
+## 2024-04-11 - Telemetry Data Table Accessibility
+**Learning:** Data tables require `scope="col"` on header cells and a `<caption>` for proper screen reader accessibility. Since global utility classes like `.sr-only` are not available in this codebase, visually hidden elements (like screen-reader-only captions) must be styled using explicit inline CSS.
+**Action:** When adding accessible tables without standard global CSS utilities, explicitly add visually hidden `<caption>` tags with inline styles: `style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: 0 }}` and use `scope="col"` on `<th>` tags.
