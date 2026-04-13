@@ -1,0 +1,3 @@
+## 2024-04-13 - Next.js App Global CSS `.sr-only` Workaround
+**Learning:** The default global CSS in this Next.js app does not include standard screen-reader-only utility classes like `.sr-only`.
+**Action:** When an element (like a table caption) needs to be visually hidden for accessibility without breaking layout or using new utility classes, I must use an explicit inline CSS style object: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
