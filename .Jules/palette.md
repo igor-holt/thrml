@@ -1,0 +1,3 @@
+## 2025-02-23 - Reusable Visually Hidden CSS Pattern
+**Learning:** This design system relies heavily on `globals.css` and inline styles, and lacks standard utility classes like `.sr-only`. Attempting to use external classes for visually hidden elements breaks accessibility tools or layout.
+**Action:** When adding visually hidden elements (like table captions for screen readers) in this project, explicitly use the inline style pattern: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
