@@ -45,12 +45,15 @@ const TelemetryTimeline: React.FC = () => {
         {/* Optional: Raw Table for Details */}
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <caption style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}>
+              Raw telemetry details
+            </caption>
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd' }}>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Event</th>
-                <th style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Log ID</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>UTC</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Event</th>
+                <th scope="col" style={{ padding: '10px', textAlign: 'left' }}>Prediction (p)</th>
               </tr>
             </thead>
             <tbody>

@@ -1,0 +1,3 @@
+## 2024-04-28 - Visually hidden screen reader captions
+**Learning:** The application's `app/globals.css` lacks utility classes like `.sr-only`. Attempting to hide a `<caption>` for screen readers using standard utility classes will not work.
+**Action:** When elements need to be visually hidden for accessibility without breaking the layout (such as `<caption>`), use explicit inline CSS styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
