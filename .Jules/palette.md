@@ -1,0 +1,3 @@
+## 2024-05-15 - Data Table Accessibility
+**Learning:** For Next.js projects lacking utility classes like `.sr-only` (e.g., Tailwind not configured), data tables must use explicit inline CSS styles for visually hidden `<caption>` elements to ensure screen reader accessibility without breaking layout.
+**Action:** Always verify the availability of `.sr-only` utility classes in `globals.css` or equivalent files. If absent, apply the standard visually hidden inline style block `{{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: 0 }}` to `<caption>` tags.
