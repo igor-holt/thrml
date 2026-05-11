@@ -1,0 +1,3 @@
+## 2025-01-01 - Data Table Accessibility Constraints
+**Learning:** This project lacks global CSS utility classes (like `.sr-only`) for visually hiding accessibility elements like table captions. Attempting to use them fails. Additionally, data tables require explicit `scope="col"` attributes on `<th>` elements and `<caption>` elements to be fully accessible.
+**Action:** When adding visually hidden structural elements (like table captions) for accessibility, use explicit inline styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`. Ensure all data tables have this hidden caption and that table headers (`<th>`) explicitly define `scope="col"`.
