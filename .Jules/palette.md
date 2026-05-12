@@ -1,0 +1,3 @@
+## 2024-05-12 - Adding screen-reader only elements using inline styles
+**Learning:** When adding hidden accessibility elements (like `<caption>` on tables) in a project that lacks utility classes like `.sr-only` in `globals.css`, we must rely on inline styles.
+**Action:** Use the pattern `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}` to visually hide text without breaking layout or removing it from screen readers.
