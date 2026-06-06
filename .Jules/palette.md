@@ -1,0 +1,3 @@
+## 2024-05-07 - Data Table Accessibility Constraints
+**Learning:** The `globals.css` does not provide a `.sr-only` utility class, meaning standard screen-reader-only text patterns will break layout or not be hidden properly. Data tables also require explicit `scope="col"` attributes for screen reader clarity.
+**Action:** Always use an explicit, comprehensive inline style object (`position: absolute`, `width: 1px`, `height: 1px`, `padding: 0`, `margin: -1px`, `overflow: hidden`, `clip: rect(0, 0, 0, 0)`, `whiteSpace: nowrap`, `borderWidth: 0`) for visually hidden screen-reader elements (like `<caption>`) in this application.
