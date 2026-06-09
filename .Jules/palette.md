@@ -1,0 +1,3 @@
+## 2024-05-05 - Accessibility Utility Classes Constraint
+**Learning:** The application's `globals.css` does not include utility classes for screen-reader-only elements (like `.sr-only`). Adding them directly to `globals.css` could be out of scope for small UX touches.
+**Action:** Use explicit inline CSS styles (`style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`) to visually hide structural elements like `<caption>` that need to remain available for screen readers without breaking the layout.

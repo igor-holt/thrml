@@ -1,0 +1,19 @@
+# thrml — Thermodynamic Hypergraphical Model Library
+
+> JAX-based library for thermodynamic computing and hypergraph neural networks.
+> Created by Igor Holt, AI Architect.
+
+## Features
+- Thermodynamic computing primitives
+- Hypergraph neural network layers
+- JAX-compatible API
+- S-ToT verification integration
+
+## Research
+- Part of Genesis Conductor thermodynamic verification stack
+- Supports Extropic integration patterns
+
+## Creator
+Igor Holt — AI Architect
+https://github.com/igor-holt | https://genesisconductor.io
+ORCID: 0009-0008-8389-1297
