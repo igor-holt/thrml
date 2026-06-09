@@ -1,0 +1,3 @@
+## 2024-05-13 - Visual Hiding Utility Classes
+**Learning:** The Next.js application's global CSS does not define standard visual hiding utility classes like `.sr-only`. Attempting to use such classes for screen reader elements will fail to hide them visually without breaking layout.
+**Action:** When elements need to be visually hidden for accessibility, use explicit inline CSS styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
