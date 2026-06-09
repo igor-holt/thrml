@@ -1,0 +1,3 @@
+## 2024-06-25 - Accessible visually hidden elements without utility classes
+**Learning:** The application lacks a global utility class like `.sr-only` for visually hiding elements intended for screen readers.
+**Action:** Use an explicit inline style object pattern (`{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }`) for accessibility enhancements that require visually hidden text, such as `<caption>` elements on data tables, to ensure they remain accessible without breaking layouts or introducing new global CSS.
