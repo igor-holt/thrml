@@ -1,0 +1,3 @@
+## 2026-04-22 - Table Accessibility and Visually Hidden Elements
+**Learning:** Data tables must include `scope="col"` on `<th>` elements and a `<caption>` element to be fully accessible. When `.sr-only` utility classes aren't available, elements can be visually hidden for screen readers using explicit inline CSS: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
+**Action:** Always add semantic table elements (`caption`, `scope`) and use the inline CSS string pattern for visually hidden screen-reader text when utility classes are absent in the design system.
