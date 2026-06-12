@@ -1,0 +1,3 @@
+## 2024-05-18 - Next.js Data Table Accessibility
+**Learning:** Next.js data tables (like TelemetryTimeline) require `<caption>` elements for screen readers, but the app's global CSS lacks utility classes like `.sr-only` to hide them visually.
+**Action:** When adding `<caption>` elements to Next.js tables, use explicit inline CSS styles (`style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`) to visually hide them without breaking layout, and ensure `<th>` headers have `scope="col"`.
