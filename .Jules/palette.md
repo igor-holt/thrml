@@ -1,0 +1,3 @@
+## 2024-05-24 - Data Table Accessibility Context
+**Learning:** Tables in this specific codebase lack generic SR-only utility classes in `globals.css` and often omit `scope="col"` on `<th>` elements and `<caption>` for context. This makes raw data presentations (like telemetry tables) difficult for screen reader users to understand.
+**Action:** When working on tables in this project, explicitly add `scope="col"` to headers and provide context using `<caption>` with inline SR-only styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
