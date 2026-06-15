@@ -1,0 +1,3 @@
+## 2025-02-21 - Using Inline Visually Hidden Styles
+**Learning:** The global CSS (`app/globals.css`) in this Next.js app does not provide utility classes like `.sr-only`. Attempting to add generic global utility classes is out-of-scope for small UI changes and risks bleeding into existing code.
+**Action:** When elements (like screen-reader `<caption>` tags) must be visually hidden without breaking layout or visual appearance, I must use explicit inline CSS styles: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`. This is the exact pattern applied to the Telemetry table caption.
