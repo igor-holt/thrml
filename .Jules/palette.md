@@ -1,0 +1,3 @@
+## 2026-03-02 - Visually Hidden Elements and Table Headers
+**Learning:** This application lacks CSS utility frameworks (e.g., Tailwind) or standard global utility classes like `.sr-only`. Thus, screen-reader text, such as a visually hidden `<caption>` element, must be implemented using explicit inline styling (`position: 'absolute', width: '1px', overflow: 'hidden'`). Data tables like those in `TelemetryTimeline` also require `scope="col"` attributes on header cells to be accessible.
+**Action:** When creating visually hidden, screen-reader-only text (like table captions or hidden labels), apply inline CSS directly. Always ensure data tables contain `<caption>` elements and `scope` attributes for proper accessibility structure.
