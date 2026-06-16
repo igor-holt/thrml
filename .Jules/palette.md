@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility improvements for Tables and Tooltips
+**Learning:** This app's global CSS lacks `.sr-only` or visually hidden utility classes, requiring raw inline styles (`clip`, `overflow: hidden`, etc.) to hide semantic accessibility elements (like `<caption>`) without breaking visual layouts. Recharts Custom Tooltips can utilize the existing `.card` CSS class to maintain design consistency rather than adding fresh styling logic.
+**Action:** When adding visually hidden a11y text (like screen-reader-only captions or labels), inject the standard inline CSS hidden snippet. Reuse `.card` for floating UI elements like tooltips or popovers to maintain consistent aesthetics.
