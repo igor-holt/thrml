@@ -1,0 +1,3 @@
+## 2024-05-24 - Visually Hidden Text in THRML
+**Learning:** The THRML web application does not have a `.sr-only` class in `app/globals.css`. When adding visually hidden elements like `<caption>` for screen readers, you must use explicit inline CSS styles (`style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`). Also, `scope="col"` is required on `<th>` elements for proper table accessibility.
+**Action:** Always use explicit inline CSS to visually hide elements when working in this project, rather than relying on global utility classes. Ensure all data tables have a `<caption/>` and `scope="col"` on header cells.
