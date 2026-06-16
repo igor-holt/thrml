@@ -228,13 +228,16 @@ class BlockSamplingProgram(eqx.Module):
 
                     active = np.zeros((n_nodes, n_interactions), dtype=bool)
                     for i, inds in enumerate(interact_inds):
-                        for j, ind in enumerate(inds):
-                            interaction_slices[i, j] = ind
-                            active[i, j] = 1
+                        if not inds:
+                            continue
+                        m = len(inds)
+                        interaction_slices[i, :m] = inds
+                        active[i, :m] = True
 
-                            for k, tail_block in enumerate(interaction_group.tail_nodes):
-                                s = gibbs_spec.node_global_location_map[tail_block.nodes[ind]][1]
-                                global_slices[k][i, j] = s
+                        for k, tail_block in enumerate(interaction_group.tail_nodes):
+                            global_slices[k][i, :m] = [
+                                gibbs_spec.node_global_location_map[tail_block.nodes[ind]][1] for ind in inds
+                            ]
 
                     interaction_slices = jnp.array(interaction_slices)
 
