@@ -1,0 +1,3 @@
+## 2024-04-06 - Visually Hidden Elements for Accessibility
+**Learning:** In codebases without a utility framework (like Tailwind's `sr-only`), visually hidden content should use a complete canonical style pattern so it remains available to screen readers without affecting layout. That pattern typically includes absolute positioning, 1px dimensions, negative margin, hidden overflow, no wrapping, no border, and both `clip: rect(0, 0, 0, 0)` and `clipPath: inset(50%)`.
+**Action:** Prefer a shared utility class or constant for visually hidden content to keep usage consistent. If inline styles are necessary, document and reuse the full canonical property set rather than copying a partial block.
