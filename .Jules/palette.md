@@ -1,0 +1,3 @@
+## 2024-03-24 - Visually Hidden Table Captions
+**Learning:** This app lacks utility classes like `.sr-only` in `app/globals.css`. Data tables need captions for accessibility, but visible captions might break the desired layout.
+**Action:** Use a specific set of inline CSS styles (`style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", borderWidth: 0 }}`) to visually hide structural elements like `<caption>` without removing them from the accessibility tree, ensuring screen readers can still announce them.
