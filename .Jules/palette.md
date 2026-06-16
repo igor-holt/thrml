@@ -1,0 +1,3 @@
+## 2024-03-03 - Accessible visually hidden elements and data tables
+**Learning:** The `app/globals.css` file does not define utility classes like `.sr-only`. When elements (e.g., screen-reader captions for data tables) need to be visually hidden for accessibility without breaking layout, they must use explicit inline CSS styles (e.g., `position: 'absolute', width: '1px', overflow: 'hidden'`). Additionally, all data tables must include `scope="col"` attributes on header cells (`<th>`) and a `<caption>` element for accessibility.
+**Action:** Always apply these inline CSS properties for visually hidden elements, and ensure all table structures explicitly denote row/column scopes and contain captions.
