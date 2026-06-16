@@ -7,9 +7,21 @@ theme:
         - header.autohide
         - content.code.copy
     palette:
+        # Palette toggle for light mode
+        - scheme: default
+          primary: black
+          accent: amber
+          toggle:
+            icon: material/brightness-7
+            name: Switch to dark mode
+
+        # Palette toggle for dark mode
         - scheme: slate
           primary: black
           accent: amber
+          toggle:
+            icon: material/brightness-4
+            name: Switch to light mode
     icon:
         repo: fontawesome/brands/github
     logo: "_static/logo/logo.svg"
