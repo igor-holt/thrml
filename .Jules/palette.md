@@ -1,0 +1,3 @@
+## 2024-05-15 - Missing Utility Classes for Visually Hidden Elements
+**Learning:** This Next.js app's CSS (`app/globals.css`) lacks common utility classes like `.sr-only` for visually hiding elements intended for screen readers.
+**Action:** When creating visually hidden elements (like `<caption>` tags for accessibility), use an explicit inline CSS string: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}` instead of relying on non-existent CSS classes.
