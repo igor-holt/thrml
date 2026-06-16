@@ -1,0 +1,3 @@
+## 2023-10-27 - Telemetry Table Accessibility
+**Learning:** This app lacks utility classes like `.sr-only` for visually hiding elements. To make tables accessible to screen readers without breaking layout, use explicit inline CSS strings (e.g., `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`) for elements like `<caption>`. Additionally, data tables must include `scope="col"` attributes on header cells (`<th>`).
+**Action:** When adding accessible text that shouldn't be visually displayed, use the verbose inline style object rather than assuming a utility class exists. Always include `caption` and `scope` on table elements.
