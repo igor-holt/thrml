@@ -1,0 +1,3 @@
+## 2024-04-25 - Accessible Data Tables in Telemetry
+**Learning:** Data tables lacking explicit captions and scope attributes hinder screen reader navigation, and standard generic CSS utility classes (like `.sr-only`) may be unavailable in some Next.js app setups, requiring specific inline styling patterns for visually hiding elements without breaking layout.
+**Action:** Always include a `<caption>` and `scope="col"`/`scope="row"` attributes on data tables. If a visually hidden caption is required for design reasons and utility classes are missing, use the specific inline CSS pattern: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`.
