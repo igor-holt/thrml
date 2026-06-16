@@ -1,0 +1,3 @@
+## 2024-11-20 - Accessible Visually Hidden Elements without Global Utilities
+**Learning:** The `thrml` repository web app (`app/globals.css`) does not provide standard utility classes like `.sr-only` for visually hiding content (e.g., screen-reader captions) while keeping it accessible.
+**Action:** When a screen-reader element needs to be visually hidden without breaking layout and no utility class exists, apply an explicit inline style pattern instead: `style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}`. This ensures accessibility guidelines are met within the constraints of the project architecture.
