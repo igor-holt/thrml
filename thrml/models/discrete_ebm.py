@@ -1,3 +1,4 @@
+import itertools
 from collections import defaultdict
 from typing import Type
 
@@ -129,21 +130,22 @@ class DiscreteEBMFactor(EBMFactor, WeightedFactor):
 
         n_spin = len(self.spin_node_groups)
         n_cat = len(self.categorical_node_groups)
-        n_total = n_spin + n_cat
 
         # handle the interaction groups with spin head nodes
         if n_spin > 0:
             spin_inds = list(range(len(self.spin_node_groups)))
             spin_combos = [(x, spin_inds[:i] + spin_inds[i + 1 :]) for i, x in enumerate(spin_inds)]
 
-            all_head_nodes = []
-            all_tail_nodes = [[] for _ in range(n_total - 1)]
-            for combo in spin_combos:
-                all_head_nodes += self.spin_node_groups[combo[0]].nodes
-                for i, tail_ind in enumerate(combo[1]):
-                    all_tail_nodes[i] += self.spin_node_groups[tail_ind].nodes
-                for j, cat_group in enumerate(self.categorical_node_groups):
-                    all_tail_nodes[n_spin - 1 + j] += cat_group.nodes
+            all_head_nodes = list(
+                itertools.chain.from_iterable(self.spin_node_groups[combo[0]].nodes for combo in spin_combos)
+            )
+            all_tail_nodes = [
+                list(itertools.chain.from_iterable(self.spin_node_groups[combo[1][i]].nodes for combo in spin_combos))
+                for i in range(n_spin - 1)
+            ] + [
+                list(itertools.chain.from_iterable(cat_group.nodes for _ in spin_combos))
+                for cat_group in self.categorical_node_groups
+            ]
 
             tiler = [1] * len(self.weights.shape)
             tiler[0] = n_spin
@@ -195,14 +197,11 @@ def _merge_groups(groups, n_tail_groups):
     if len(groups) == 0:
         return groups
 
-    all_head = []
-    all_tail = [[] for _ in range(n_tail_groups)]
-    all_weights = []
-    for group in groups:
-        all_head += group.head_nodes.nodes
-        for i, block in enumerate(group.tail_nodes):
-            all_tail[i] += block.nodes
-        all_weights.append(group.interaction.weights)
+    all_head = list(itertools.chain.from_iterable(group.head_nodes.nodes for group in groups))
+    all_tail = [
+        list(itertools.chain.from_iterable(group.tail_nodes[i].nodes for group in groups)) for i in range(n_tail_groups)
+    ]
+    all_weights = [group.interaction.weights for group in groups]
 
     return [
         InteractionGroup(
