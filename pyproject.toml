@@ -28,7 +28,7 @@ examples = [
 ]
 testing = [
     "coverage==7.3.2",
-    "pytest==7.2.0",
+    "pytest==9.0.3",
     "nbmake>=1.5.5",
     "networkx>=2.6.3",
     "optax>=0.2.4"
