@@ -139,11 +139,11 @@ class DiscreteEBMFactor(EBMFactor, WeightedFactor):
             all_head_nodes = []
             all_tail_nodes = [[] for _ in range(n_total - 1)]
             for combo in spin_combos:
-                all_head_nodes += self.spin_node_groups[combo[0]].nodes
+                all_head_nodes.extend(self.spin_node_groups[combo[0]].nodes)
                 for i, tail_ind in enumerate(combo[1]):
-                    all_tail_nodes[i] += self.spin_node_groups[tail_ind].nodes
+                    all_tail_nodes[i].extend(self.spin_node_groups[tail_ind].nodes)
                 for j, cat_group in enumerate(self.categorical_node_groups):
-                    all_tail_nodes[n_spin - 1 + j] += cat_group.nodes
+                    all_tail_nodes[n_spin - 1 + j].extend(cat_group.nodes)
 
             tiler = [1] * len(self.weights.shape)
             tiler[0] = n_spin
@@ -199,9 +199,9 @@ def _merge_groups(groups, n_tail_groups):
     all_tail = [[] for _ in range(n_tail_groups)]
     all_weights = []
     for group in groups:
-        all_head += group.head_nodes.nodes
+        all_head.extend(group.head_nodes.nodes)
         for i, block in enumerate(group.tail_nodes):
-            all_tail[i] += block.nodes
+            all_tail[i].extend(block.nodes)
         all_weights.append(group.interaction.weights)
 
     return [
