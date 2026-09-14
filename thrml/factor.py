@@ -105,6 +105,6 @@ class FactorSamplingProgram(BlockSamplingProgram):
 
         all_interaction_groups = list(other_interaction_groups)
         for factor in factors:
-            all_interaction_groups += factor.to_interaction_groups()
+            all_interaction_groups.extend(factor.to_interaction_groups())
 
         super().__init__(gibbs_spec, samplers, all_interaction_groups)
