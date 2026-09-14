@@ -203,9 +203,46 @@ class MomentAccumulatorObserver(AbstractObserver):
         iteration: Int[Array, ""],
     ) -> tuple[list[Array], PyTree]:
         """Accumulate the moments via `carry`. Does not return anything for the sampler to write down."""
-        global_state = block_state_to_global(state_free + state_clamped, program.gibbs_spec)
+        all_blocks_spec = program.gibbs_spec.free_blocks + program.gibbs_spec.clamped_blocks
+        all_states = state_free + state_clamped
 
-        sampled_state = from_global_state(global_state, program.gibbs_spec, self.blocks_to_sample)
+        node_to_source = {}
+        for b_idx, block in enumerate(all_blocks_spec):
+            for n_idx, node in enumerate(block.nodes):
+                node_to_source[node] = (b_idx, n_idx)
+
+        sampled_state = []
+        for target_block in self.blocks_to_sample:
+            source_groups = defaultdict(lambda: {"src_indices": [], "dst_indices": []})
+
+            for dst_idx, node in enumerate(target_block.nodes):
+                if node in node_to_source:
+                    src_blk_idx, src_node_idx = node_to_source[node]
+                    source_groups[src_blk_idx]["src_indices"].append(src_node_idx)
+                    source_groups[src_blk_idx]["dst_indices"].append(dst_idx)
+                else:
+                    raise RuntimeError(f"Node {node} required for moments but not found in program blocks.")
+
+            node_type = target_block.node_type
+            node_struct = program.gibbs_spec.node_shape_struct[node_type]
+
+            def make_zeros(leaf):
+                shape = (len(target_block),) + leaf.shape
+                return jnp.zeros(shape, dtype=leaf.dtype)
+
+            block_result = jax.tree.map(make_zeros, node_struct)
+
+            for src_blk_idx, indices in source_groups.items():
+                src_indices = jnp.array(indices["src_indices"])
+                dst_indices = jnp.array(indices["dst_indices"])
+
+                src_state = all_states[src_blk_idx]
+
+                data = jax.tree.map(lambda x: x[src_indices], src_state)
+
+                block_result = jax.tree.map(lambda res, d: res.at[dst_indices].set(d), block_result, data)
+
+            sampled_state.append(block_result)
 
         sampled_state = self.f_transform(sampled_state, self.blocks_to_sample)
         sampled_state = list(sampled_state)
