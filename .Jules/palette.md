@@ -1,0 +1,3 @@
+## 2026-07-13 - Backend JAX Library Repository
+**Learning:** This repository is purely a backend Python JAX library focused on probabilistic graphical models. There is no web frontend, Next.js, React, HTML, or CSS involved.
+**Action:** If tasked to improve UX or accessibility in a backend repository, recognize that these concepts don't apply, document this, and halt execution without creating a PR.
