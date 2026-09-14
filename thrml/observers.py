@@ -83,8 +83,34 @@ class StateObserver(AbstractObserver):
         iteration: Int[Array, ""],
     ) -> tuple[None, PyTree]:
         """Simply returns the state of the blocks that are being logged to be recorded by the sampler."""
-        global_state = block_state_to_global(state_free + state_clamped, program.gibbs_spec)
-        sampled_state = from_global_state(global_state, program.gibbs_spec, self.blocks_to_sample)
+        # Check if we can just grab the blocks directly from the state
+        # this avoids the overhead of converting to global state and back
+
+        # Since we are likely jitted here, the map creation is done at trace time
+        block_map = {}
+        for i, block in enumerate(program.gibbs_spec.free_blocks):
+            block_map[block] = (state_free, i)
+        for i, block in enumerate(program.gibbs_spec.clamped_blocks):
+            block_map[block] = (state_clamped, i)
+
+        sampled_state = [None] * len(self.blocks_to_sample)
+        blocks_missing = []
+        indices_missing = []
+
+        for i, block in enumerate(self.blocks_to_sample):
+            if block in block_map:
+                source, idx = block_map[block]
+                sampled_state[i] = source[idx]
+            else:
+                blocks_missing.append(block)
+                indices_missing.append(i)
+
+        if blocks_missing:
+            global_state = block_state_to_global(state_free + state_clamped, program.gibbs_spec)
+            missing_sampled = from_global_state(global_state, program.gibbs_spec, blocks_missing)
+            for idx, s in zip(indices_missing, missing_sampled):
+                sampled_state[idx] = s
+
         return None, sampled_state
 
 
