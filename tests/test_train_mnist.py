@@ -170,10 +170,8 @@ class TestTrainMnist(unittest.TestCase):
                 # optax does not obey this
                 with jax.numpy_dtype_promotion("standard"):
                     updates, _opt_state = self.optim.update(grads, _opt_state, _params)
+                _params = optax.apply_updates(_params, updates)
                 _weights, _biases = _params
-                # todo: grads are negative vs. positive
-                _weights += updates[0]
-                _biases += updates[1]
 
                 new_carry = _opt_state, (_weights, _biases)
 
